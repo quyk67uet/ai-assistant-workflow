@@ -1,0 +1,52 @@
+[
+  {
+    "timestamp": "2025-09-13T20:42:15.318683",
+    "student_id": "student_01",
+    "activity": "assignment_created",
+    "details": {
+      "learning_object": "Giải hệ phương trình bằng phương pháp thế",
+      "num_questions": 3.0,
+      "assignment_id": "assignment_20250913_204215"
+    }
+  },
+  {
+    "timestamp": "2025-09-13T20:45:43.358308",
+    "student_id": "student_01",
+    "activity": "assignment_created",
+    "details": {
+      "learning_object": "Giải hệ phương trình bằng phương pháp thế",
+      "num_questions": 3.0,
+      "assignment_id": "assignment_20250913_204543"
+    }
+  },
+  {
+    "timestamp": "2025-09-13T20:52:38.214968",
+    "student_id": "student_02",
+    "activity": "assignment_created",
+    "details": {
+      "learning_object": "Dấu hiệu nhận biết tứ giác nội tiếp",
+      "num_questions": 5.0,
+      "assignment_id": "assignment_20250913_205238"
+    }
+  },
+  {
+    "timestamp": "2025-09-13T20:55:23.402052",
+    "student_id": "student_02",
+    "activity": "assignment_created",
+    "details": {
+      "learning_object": "Dấu hiệu nhận biết tứ giác nội tiếp",
+      "num_questions": 5.0,
+      "assignment_id": "assignment_20250913_205523"
+    }
+  },
+  {
+    "timestamp": "2025-09-13T20:58:34.386375",
+    "student_id": "student_02",
+    "activity": "assignment_created",
+    "details": {
+      "learning_object": "Dấu hiệu nhận biết tứ giác nội tiếp",
+      "num_questions": 5.0,
+      "assignment_id": "assignment_20250913_205834"
+    }
+  }
+]

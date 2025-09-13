@@ -1,0 +1,52 @@
+[
+  {
+    "id": "assignment_20250913_204215",
+    "student_id": "student_01",
+    "student_name": "An",
+    "learning_object_id": "LO-C1-07",
+    "learning_object_title": "Giải hệ phương trình bằng phương pháp thế",
+    "num_questions": 3.0,
+    "assigned_date": "2025-09-13T20:42:15.314918",
+    "status": "assigned"
+  },
+  {
+    "id": "assignment_20250913_204543",
+    "student_id": "student_01",
+    "student_name": "An",
+    "learning_object_id": "LO-C1-07",
+    "learning_object_title": "Giải hệ phương trình bằng phương pháp thế",
+    "num_questions": 3.0,
+    "assigned_date": "2025-09-13T20:45:43.356980",
+    "status": "assigned"
+  },
+  {
+    "id": "assignment_20250913_205238",
+    "student_id": "student_02",
+    "student_name": "Bình",
+    "learning_object_id": "LO-C8-04",
+    "learning_object_title": "Dấu hiệu nhận biết tứ giác nội tiếp",
+    "num_questions": 5.0,
+    "assigned_date": "2025-09-13T20:52:38.212446",
+    "status": "assigned"
+  },
+  {
+    "id": "assignment_20250913_205523",
+    "student_id": "student_02",
+    "student_name": "Bình",
+    "learning_object_id": "LO-C8-04",
+    "learning_object_title": "Dấu hiệu nhận biết tứ giác nội tiếp",
+    "num_questions": 5.0,
+    "assigned_date": "2025-09-13T20:55:23.399200",
+    "status": "assigned"
+  },
+  {
+    "id": "assignment_20250913_205834",
+    "student_id": "student_02",
+    "student_name": "Bình",
+    "learning_object_id": "LO-C8-04",
+    "learning_object_title": "Dấu hiệu nhận biết tứ giác nội tiếp",
+    "num_questions": 5.0,
+    "assigned_date": "2025-09-13T20:58:34.385799",
+    "status": "assigned"
+  }
+]
