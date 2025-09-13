@@ -1,0 +1,40 @@
+[
+  {
+    "student_id": "student_01",
+    "student_name": "An",
+    "overall_progress": 75,
+    "strengths": [
+      "Tư duy logic tốt",
+      "Làm bài cẩn thận"
+    ],
+    "weaknesses": [
+      "Chưa thành thạo phương pháp thế"
+    ],
+    "tutor_notes": [
+      {
+        "timestamp": "2025-09-13T21:11:18.982288",
+        "note": "Học sinh có tiến bộ rõ rệt trong tuần này",
+        "tutor": "Admin"
+      },
+      {
+        "timestamp": "2025-09-13T21:13:58.283226",
+        "note": "Học sinh có tiến bộ rõ rệt trong tuần này",
+        "tutor": "Admin"
+      }
+    ]
+  },
+  {
+    "student_id": "student_02",
+    "student_name": "Bình",
+    "overall_progress": 60,
+    "strengths": [
+      "Ham học hỏi",
+      "Tích cực đặt câu hỏi"
+    ],
+    "weaknesses": [
+      "Hay mắc lỗi tính toán",
+      "Cần cải thiện kỹ năng hình học"
+    ],
+    "tutor_notes": []
+  }
+]

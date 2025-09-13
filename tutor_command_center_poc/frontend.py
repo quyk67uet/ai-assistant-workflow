@@ -188,7 +188,7 @@ def display_logs(logs: List[Dict]):
     
     # Then show detailed information separately (not nested in expander)
     st.markdown("---")
-    show_details = st.checkbox("🔍 Hiển thị chi tiết từng bước", key=f"show_log_details_{len(logs)}")
+    show_details = st.checkbox("🔍 Hiển thị chi tiết từng bước", key=f"show_log_details_{len(logs)}_{hash(str(logs))}")
     
     if show_details:
         st.markdown("### 📊 Chi tiết từng bước:")

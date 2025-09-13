@@ -145,3 +145,215 @@ def get_student_activity_log(student_name: str, date_range: str = "today") -> st
         "total_activities": len(student_logs),
         "activities": student_logs
     }, ensure_ascii=False, indent=2)
+
+
+def grade_submission(submission_id: str, score: float, feedback_text: str) -> str:
+    """
+    Grade a student submission and provide feedback.
+    
+    Args:
+        submission_id: The ID of the submission to grade
+        score: The score to assign (0-100)
+        feedback_text: Detailed feedback text for the student
+    
+    Returns:
+        Success or error message
+    """
+    submissions_path = os.path.join("data", "mock_submissions.json")
+    submissions = _read_json(submissions_path)
+    
+    # Find submission
+    submission = None
+    for i, sub in enumerate(submissions):
+        if sub["id"] == submission_id:
+            submission = sub
+            submission_index = i
+            break
+    
+    if not submission:
+        return f"Không tìm thấy bài nộp có ID '{submission_id}'"
+    
+    # Validate score
+    if not (0 <= score <= 100):
+        return "Điểm số phải nằm trong khoảng 0-100"
+    
+    # Update submission
+    submissions[submission_index].update({
+        "score": score,
+        "feedback": feedback_text,
+        "status": "graded",
+        "graded_date": datetime.now().isoformat()
+    })
+    
+    # Save updated submissions
+    _write_json(submissions_path, submissions)
+    
+    # Log activity
+    _log_activity(
+        submission["student_id"],
+        "submission_graded",
+        {
+            "submission_id": submission_id,
+            "score": score,
+            "feedback_preview": feedback_text[:50] + "..." if len(feedback_text) > 50 else feedback_text
+        }
+    )
+    
+    return f"Đã chấm điểm thành công bài nộp của {submission['student_name']}: {score}/100 điểm"
+
+
+def add_note_to_report(student_name: str, note_text: str) -> str:
+    """
+    Add a tutor note to student's progress report.
+    
+    Args:
+        student_name: The name of the student
+        note_text: The note text to add
+    
+    Returns:
+        Success or error message
+    """
+    # Find student
+    students_path = os.path.join("data", "mock_students.json")
+    students = _read_json(students_path)
+    
+    student = None
+    for s in students:
+        if s["name"].lower() == student_name.lower():
+            student = s
+            break
+    
+    if not student:
+        return f"Không tìm thấy học sinh có tên '{student_name}'"
+    
+    # Get and update student report
+    reports_path = os.path.join("data", "mock_student_reports.json")
+    reports = _read_json(reports_path)
+    
+    # Find or create report
+    report = None
+    report_index = -1
+    for i, rep in enumerate(reports):
+        if rep["student_id"] == student["id"]:
+            report = rep
+            report_index = i
+            break
+    
+    if not report:
+        # Create new report
+        report = {
+            "student_id": student["id"],
+            "student_name": student["name"],
+            "overall_progress": 0,
+            "strengths": [],
+            "weaknesses": [],
+            "tutor_notes": []
+        }
+        reports.append(report)
+        report_index = len(reports) - 1
+    
+    # Add note with timestamp
+    note_entry = {
+        "timestamp": datetime.now().isoformat(),
+        "note": note_text,
+        "tutor": "Admin"  # In real system, get from session
+    }
+    
+    reports[report_index]["tutor_notes"].append(note_entry)
+    
+    # Save updated reports
+    _write_json(reports_path, reports)
+    
+    # Log activity
+    _log_activity(
+        student["id"],
+        "note_added_to_report",
+        {
+            "note_preview": note_text[:50] + "..." if len(note_text) > 50 else note_text,
+            "total_notes": len(reports[report_index]["tutor_notes"])
+        }
+    )
+    
+    return f"Đã thêm ghi chú vào báo cáo của {student['name']}. Tổng số ghi chú: {len(reports[report_index]['tutor_notes'])}"
+
+
+def create_custom_pathway(student_name: str, learning_object_titles: List[str]) -> str:
+    """
+    Create a custom learning pathway for a student.
+    
+    Args:
+        student_name: The name of the student
+        learning_object_titles: List of learning object titles to include in pathway
+    
+    Returns:
+        Success or error message
+    """
+    # Find student
+    students_path = os.path.join("data", "mock_students.json")
+    students = _read_json(students_path)
+    
+    student = None
+    for s in students:
+        if s["name"].lower() == student_name.lower():
+            student = s
+            break
+    
+    if not student:
+        return f"Không tìm thấy học sinh có tên '{student_name}'"
+    
+    # Find learning objects
+    lo_path = os.path.join("data", "mock_learning_objects.json")
+    learning_objects = _read_json(lo_path)
+    
+    matched_los = []
+    not_found = []
+    
+    for title in learning_object_titles:
+        found = False
+        for lo in learning_objects:
+            if title.lower() in lo["title"].lower() or lo["title"].lower() in title.lower():
+                if lo not in matched_los:  # Avoid duplicates
+                    matched_los.append(lo)
+                found = True
+                break
+        if not found:
+            not_found.append(title)
+    
+    if not matched_los:
+        return f"Không tìm thấy chủ đề học tập nào phù hợp trong danh sách: {', '.join(learning_object_titles)}"
+    
+    # Create pathway
+    pathway = {
+        "id": f"pathway_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+        "student_id": student["id"],
+        "student_name": student["name"],
+        "title": f"Lộ trình tùy chỉnh cho {student['name']}",
+        "learning_objects": matched_los,
+        "created_date": datetime.now().isoformat(),
+        "status": "active",
+        "completion_progress": 0
+    }
+    
+    # Save pathway
+    pathways_path = os.path.join("data", "mock_custom_pathways.json")
+    pathways = _read_json(pathways_path)
+    pathways.append(pathway)
+    _write_json(pathways_path, pathways)
+    
+    # Log activity
+    _log_activity(
+        student["id"],
+        "custom_pathway_created",
+        {
+            "pathway_id": pathway["id"],
+            "total_learning_objects": len(matched_los),
+            "learning_objects": [lo["title"] for lo in matched_los]
+        }
+    )
+    
+    result_msg = f"Đã tạo lộ trình tùy chỉnh cho {student['name']} với {len(matched_los)} chủ đề học tập"
+    
+    if not_found:
+        result_msg += f"\nLưu ý: Không tìm thấy các chủ đề: {', '.join(not_found)}"
+    
+    return result_msg

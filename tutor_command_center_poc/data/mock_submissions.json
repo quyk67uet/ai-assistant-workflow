@@ -1,0 +1,25 @@
+[
+  {
+    "id": "sub_001",
+    "student_id": "student_01",
+    "student_name": "An",
+    "assignment_id": "assignment_20250913_204215",
+    "submitted_date": "2025-09-13T21:30:00.000000",
+    "status": "graded",
+    "score": 85.0,
+    "feedback": "Bài làm tốt, cần cải thiện phần tính toán",
+    "content": "Đây là bài làm của học sinh An về giải hệ phương trình...",
+    "graded_date": "2025-09-13T21:10:44.566299"
+  },
+  {
+    "id": "sub_002",
+    "student_id": "student_02",
+    "student_name": "Bình",
+    "assignment_id": "assignment_20250913_204543",
+    "submitted_date": "2025-09-13T21:45:00.000000",
+    "status": "submitted",
+    "score": null,
+    "feedback": null,
+    "content": "Đây là bài làm của học sinh Bình về tứ giác nội tiếp..."
+  }
+]

@@ -48,5 +48,72 @@
       "num_questions": 5.0,
       "assignment_id": "assignment_20250913_205834"
     }
+  },
+  {
+    "timestamp": "2025-09-13T21:10:44.566885",
+    "student_id": "student_01",
+    "activity": "submission_graded",
+    "details": {
+      "submission_id": "sub_001",
+      "score": 85.0,
+      "feedback_preview": "Bài làm tốt, cần cải thiện phần tính toán"
+    }
+  },
+  {
+    "timestamp": "2025-09-13T21:11:18.983138",
+    "student_id": "student_01",
+    "activity": "note_added_to_report",
+    "details": {
+      "note_preview": "Học sinh có tiến bộ rõ rệt trong tuần này",
+      "total_notes": 1
+    }
+  },
+  {
+    "timestamp": "2025-09-13T21:13:58.284887",
+    "student_id": "student_01",
+    "activity": "note_added_to_report",
+    "details": {
+      "note_preview": "Học sinh có tiến bộ rõ rệt trong tuần này",
+      "total_notes": 2
+    }
+  },
+  {
+    "timestamp": "2025-09-13T21:14:38.025475",
+    "student_id": "student_02",
+    "activity": "custom_pathway_created",
+    "details": {
+      "pathway_id": "pathway_20250913_211438",
+      "total_learning_objects": 2,
+      "learning_objects": [
+        "Giải hệ phương trình bằng phương pháp thế",
+        "Dấu hiệu nhận biết tứ giác nội tiếp"
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-09-13T21:16:07.143665",
+    "student_id": "student_02",
+    "activity": "custom_pathway_created",
+    "details": {
+      "pathway_id": "pathway_20250913_211607",
+      "total_learning_objects": 2,
+      "learning_objects": [
+        "Giải hệ phương trình bằng phương pháp thế",
+        "Dấu hiệu nhận biết tứ giác nội tiếp"
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-09-13T21:17:39.551837",
+    "student_id": "student_02",
+    "activity": "custom_pathway_created",
+    "details": {
+      "pathway_id": "pathway_20250913_211739",
+      "total_learning_objects": 2,
+      "learning_objects": [
+        "Giải hệ phương trình bằng phương pháp thế",
+        "Dấu hiệu nhận biết tứ giác nội tiếp"
+      ]
+    }
   }
 ]

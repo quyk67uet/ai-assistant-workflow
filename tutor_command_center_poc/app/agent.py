@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 from google.generativeai.types import FunctionDeclaration, Tool
 
-from .tools import assign_exercise, get_student_activity_log
+from .tools import assign_exercise, get_student_activity_log, grade_submission, add_note_to_report, create_custom_pathway
 
 # Load environment variables
 load_dotenv()
@@ -59,8 +59,76 @@ def configure_gemini():
         }
     )
     
+    grade_submission_func = FunctionDeclaration(
+        name="grade_submission",
+        description="Grade a student submission and provide feedback",
+        parameters={
+            "type": "object",
+            "properties": {
+                "submission_id": {
+                    "type": "string",
+                    "description": "The ID of the submission to grade"
+                },
+                "score": {
+                    "type": "number",
+                    "description": "The score to assign (0-100)"
+                },
+                "feedback_text": {
+                    "type": "string",
+                    "description": "Detailed feedback text for the student"
+                }
+            },
+            "required": ["submission_id", "score", "feedback_text"]
+        }
+    )
+    
+    add_note_func = FunctionDeclaration(
+        name="add_note_to_report",
+        description="Add a tutor note to student's progress report",
+        parameters={
+            "type": "object",
+            "properties": {
+                "student_name": {
+                    "type": "string",
+                    "description": "The name of the student"
+                },
+                "note_text": {
+                    "type": "string",
+                    "description": "The note text to add to the student's report"
+                }
+            },
+            "required": ["student_name", "note_text"]
+        }
+    )
+    
+    create_pathway_func = FunctionDeclaration(
+        name="create_custom_pathway",
+        description="Create a custom learning pathway for a student with specific learning objects",
+        parameters={
+            "type": "object",
+            "properties": {
+                "student_name": {
+                    "type": "string",
+                    "description": "The name of the student"
+                },
+                "learning_object_titles": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "List of learning object titles to include in the pathway"
+                }
+            },
+            "required": ["student_name", "learning_object_titles"]
+        }
+    )
+    
     # Create tool with function declarations
-    tool = Tool(function_declarations=[assign_exercise_func, get_activity_log_func])
+    tool = Tool(function_declarations=[
+        assign_exercise_func, 
+        get_activity_log_func, 
+        grade_submission_func, 
+        add_note_func, 
+        create_pathway_func
+    ])
     
     # Initialize model with tools
     model = genai.GenerativeModel(
@@ -83,6 +151,22 @@ def execute_function_call(function_name: str, args: Dict[str, Any]) -> str:
         return get_student_activity_log(
             student_name=args.get("student_name"),
             date_range=args.get("date_range", "today")
+        )
+    elif function_name == "grade_submission":
+        return grade_submission(
+            submission_id=args.get("submission_id"),
+            score=args.get("score"),
+            feedback_text=args.get("feedback_text")
+        )
+    elif function_name == "add_note_to_report":
+        return add_note_to_report(
+            student_name=args.get("student_name"),
+            note_text=args.get("note_text")
+        )
+    elif function_name == "create_custom_pathway":
+        return create_custom_pathway(
+            student_name=args.get("student_name"),
+            learning_object_titles=args.get("learning_object_titles", [])
         )
     else:
         return f"Unknown function: {function_name}"
@@ -154,9 +238,19 @@ def run_agent_flow(prompt: str) -> Dict[str, Any]:
                     function_name = function_call.name
                     function_args = {}
                     
-                    # Extract function arguments
+                    # Extract function arguments - convert protobuf to native Python types
                     for key, value in function_call.args.items():
-                        function_args[key] = value
+                        # Convert protobuf RepeatedComposite to native Python list
+                        if hasattr(value, '__iter__') and not isinstance(value, (str, bytes)):
+                            try:
+                                # Handle list/array types from protobuf
+                                function_args[key] = list(value)
+                            except:
+                                # Fallback to original value if conversion fails
+                                function_args[key] = value
+                        else:
+                            # Handle scalar types
+                            function_args[key] = value
                     
                     add_log("function_execution", "processing", 
                            f"⚙️ Thực thi function {i+1}/{len(function_calls)}: {function_name}",
