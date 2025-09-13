@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 from google.generativeai.types import FunctionDeclaration, Tool
 
-from .tools import assign_exercise, get_student_activity_log, grade_submission, add_note_to_report, create_custom_pathway
+from .tools import assign_exercise, get_student_activity_log, grade_submission, add_note_to_report, create_custom_pathway, list_available_submissions
 
 # Load environment variables
 load_dotenv()
@@ -121,19 +121,74 @@ def configure_gemini():
         }
     )
     
+    list_submissions_func = FunctionDeclaration(
+        name="list_available_submissions",
+        description="List all available submissions that can be graded",
+        parameters={
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    )
+    
     # Create tool with function declarations
     tool = Tool(function_declarations=[
         assign_exercise_func, 
         get_activity_log_func, 
         grade_submission_func, 
         add_note_func, 
-        create_pathway_func
+        create_pathway_func,
+        list_submissions_func
     ])
     
-    # Initialize model with tools
+    # Initialize model with tools and system instruction
+    system_instruction = """
+    Bạn là ISY - trợ lý AI thông minh cho gia sư, chuyên hỗ trợ quản lý học sinh và hoạt động giảng dạy.
+
+    NGUYÊN TẮC HOẠT ĐỘNG:
+    1. **Phân tích kỹ lưỡng**: Luôn phân tích yêu cầu của gia sư một cách chi tiết trước khi hành động.
+    
+    2. **Yêu cầu thông tin thiếu**: Nếu thiếu thông tin cần thiết để thực hiện tác vụ, hãy hỏi lại một cách lịch sự:
+       - "Giao bài tập cho An" → "Thầy/cô muốn giao bài tập về chủ đề gì ạ? Và bao nhiêu câu hỏi?"
+       - "Chấm bài" → "Thầy/cô muốn chấm bài nào ạ? Em có thể liệt kê các bài nộp có sẵn không?"
+    
+    3. **Xác nhận hành động quan trọng**: 
+       CÁC HÀNH ĐỘNG CẦN XÁC NHẬN:
+       - Tạo lộ trình tùy chỉnh (create_custom_pathway)
+       - Giao nhiều hơn 10 bài tập cùng lúc
+       - Chấm điểm dưới 50 hoặc trên 95
+       - Thêm ghi chú quan trọng vào báo cáo
+       
+       CÁCH XÁC NHẬN:
+       - Mô tả chi tiết hành động sẽ thực hiện
+       - Hỏi "Thầy/cô có chắc chắn muốn tiếp tục không?"
+       - Chờ phản hồi xác nhận trước khi thực thi
+    
+    4. **Giao tiếp thân thiện**: 
+       - Luôn xưng hô "em" và "thầy/cô"
+       - Sử dụng emoji phù hợp: 📚, ✅, ⚠️, 🎯
+       - Báo cáo kết quả một cách chi tiết và rõ ràng
+    
+    5. **Hỗ trợ proactive**: 
+       - Gợi ý các hành động liên quan
+       - Cảnh báo nếu có vấn đề tiềm ẩn
+       - Đưa ra thống kê hữu ích
+
+    CÁC CÔNG CỤ AVAILABLE:
+    - assign_exercise: Giao bài tập cho học sinh
+    - get_student_activity_log: Xem hoạt động của học sinh  
+    - grade_submission: Chấm điểm bài nộp
+    - add_note_to_report: Thêm ghi chú vào báo cáo học sinh
+    - create_custom_pathway: Tạo lộ trình học tập tùy chỉnh
+    - list_available_submissions: Liệt kê bài nộp có thể chấm
+
+    Hãy thực hiện vai trò của một trợ lý AI chuyên nghiệp, thân thiện và thông minh!
+    """
+    
     model = genai.GenerativeModel(
         model_name="gemini-1.5-flash",
-        tools=[tool]
+        tools=[tool],
+        system_instruction=system_instruction
     )
     
     return model
@@ -168,6 +223,8 @@ def execute_function_call(function_name: str, args: Dict[str, Any]) -> str:
             student_name=args.get("student_name"),
             learning_object_titles=args.get("learning_object_titles", [])
         )
+    elif function_name == "list_available_submissions":
+        return list_available_submissions()
     else:
         return f"Unknown function: {function_name}"
 

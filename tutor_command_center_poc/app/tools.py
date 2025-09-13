@@ -34,6 +34,98 @@ def _log_activity(student_id: str, activity: str, details: Dict[str, Any]) -> No
     _write_json(logs_path, logs)
 
 
+def validate_and_suggest_missing_info(function_name: str, provided_args: Dict[str, Any]) -> str:
+    """
+    Validate function arguments and suggest missing information.
+    
+    Args:
+        function_name: Name of the function being called
+        provided_args: Arguments provided by the user
+        
+    Returns:
+        Empty string if valid, or suggestion message if missing info
+    """
+    suggestions = {
+        "assign_exercise": {
+            "required": ["student_name", "learning_object_title", "num_questions"],
+            "suggestions": {
+                "student_name": "Vui lòng cho biết tên học sinh cần giao bài tập.",
+                "learning_object_title": "Vui lòng cho biết chủ đề/nội dung bài tập (ví dụ: 'giải hệ phương trình', 'tứ giác nội tiếp').",
+                "num_questions": "Vui lòng cho biết số lượng câu hỏi cần giao (ví dụ: 5 câu)."
+            }
+        },
+        "grade_submission": {
+            "required": ["submission_id", "score", "feedback_text"],
+            "suggestions": {
+                "submission_id": "Vui lòng cung cấp mã ID của bài nộp cần chấm (ví dụ: 'sub_001').",
+                "score": "Vui lòng cho biết điểm số (từ 0 đến 100).",
+                "feedback_text": "Vui lòng cung cấp nhận xét/feedback cho học sinh."
+            }
+        },
+        "add_note_to_report": {
+            "required": ["student_name", "note_text"],
+            "suggestions": {
+                "student_name": "Vui lòng cho biết tên học sinh cần thêm ghi chú.",
+                "note_text": "Vui lòng cung cấp nội dung ghi chú muốn thêm vào báo cáo."
+            }
+        },
+        "create_custom_pathway": {
+            "required": ["student_name", "learning_object_titles"],
+            "suggestions": {
+                "student_name": "Vui lòng cho biết tên học sinh cần tạo lộ trình.",
+                "learning_object_titles": "Vui lòng liệt kê các chủ đề học tập muốn đưa vào lộ trình (ví dụ: ['giải hệ phương trình', 'tứ giác nội tiếp'])."
+            }
+        }
+    }
+    
+    if function_name not in suggestions:
+        return ""
+    
+    config = suggestions[function_name]
+    missing = []
+    
+    for required_param in config["required"]:
+        if required_param not in provided_args or not provided_args[required_param]:
+            missing.append(config["suggestions"][required_param])
+    
+    if missing:
+        return "Để thực hiện yêu cầu này, em cần thêm thông tin:\n" + "\n".join(f"- {msg}" for msg in missing)
+    
+    return ""
+
+
+def list_available_submissions() -> str:
+    """
+    List all available submissions that can be graded.
+    
+    Returns:
+        JSON string with list of submissions
+    """
+    submissions_path = os.path.join("data", "mock_submissions.json")
+    submissions = _read_json(submissions_path)
+    
+    if not submissions:
+        return "Hiện tại không có bài nộp nào để chấm."
+    
+    available_submissions = []
+    for sub in submissions:
+        if sub.get("status") == "submitted":
+            available_submissions.append({
+                "id": sub["id"],
+                "student_name": sub["student_name"],
+                "submitted_date": sub.get("submitted_date", "N/A"),
+                "content_preview": sub.get("content", "")[:100] + "..." if len(sub.get("content", "")) > 100 else sub.get("content", "")
+            })
+    
+    if not available_submissions:
+        return "Tất cả bài nộp đã được chấm điểm."
+    
+    return json.dumps({
+        "message": f"Tìm thấy {len(available_submissions)} bài nộp chưa chấm:",
+        "submissions": available_submissions
+    }, ensure_ascii=False, indent=2)
+
+
 def assign_exercise(student_name: str, learning_object_title: str, num_questions: int) -> str:
     """
     Assign exercises to a student based on learning object title.

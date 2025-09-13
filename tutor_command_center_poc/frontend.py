@@ -223,8 +223,8 @@ def main():
     initialize_session_state()
     
     # Header
-    st.title("🎓 ISY Tutor Command Center")
-    st.caption("Giao diện điều khiển thông minh cho Gia sư - Sử dụng ngôn ngữ tự nhiên để quản lý học sinh")
+    st.title("🎓 ISY Tutor Command Center v2.0")
+    st.caption("🧠 Trợ lý AI thông minh với khả năng xử lý lỗi và xác nhận hành động - Sử dụng ngôn ngữ tự nhiên để quản lý học sinh")
     
     # Check API health
     if not st.session_state.api_available:
@@ -256,19 +256,54 @@ def main():
                 display_message(message["role"], message["content"])
     
     # Example commands
-    st.sidebar.header("📝 Ví dụ lệnh")
+    st.sidebar.header("📝 Ví dụ lệnh nâng cao")
+    
+    st.sidebar.markdown("### 🎯 Giao bài tập")
     st.sidebar.markdown("""
-    **Giao bài tập:**
+    **Đầy đủ thông tin:**
     - Giao cho An 3 bài tập về giải hệ phương trình bằng phương pháp thế
-    - Cho Bình làm 5 bài tập về tứ giác nội tiếp
+    
+    **Thiếu thông tin (AI sẽ hỏi lại):**
+    - Giao bài tập cho An
+    - Giao 5 bài tập về toán
+    """)
+    
+    st.sidebar.markdown("### 📊 Chấm bài và báo cáo")
+    st.sidebar.markdown("""
+    **Xem bài nộp:**
+    - Có bài nào cần chấm không?
+    - Liệt kê bài nộp chưa chấm
+    
+    **Chấm điểm:**
+    - Chấm bài sub_001 với điểm 85 và nhận xét tốt
+    
+    **Thêm ghi chú:**
+    - Thêm ghi chú cho An: "Tiến bộ rõ rệt tuần này"
+    """)
+    
+    st.sidebar.markdown("### 🛤️ Lộ trình tùy chỉnh")
+    st.sidebar.markdown("""
+    **Tạo lộ trình (cần xác nhận):**
+    - Tạo lộ trình cho Bình gồm: giải hệ phương trình, tứ giác nội tiếp
     
     **Xem hoạt động:**
-    - Xem lại hoạt động của An hôm nay
-    - Kiểm tra log hoạt động của Bình
-    
-    **Kết hợp:**
-    - Giao cho An 3 bài tập về giải hệ phương trình và xem hoạt động của bạn ấy
+    - Xem hoạt động của An hôm nay
+    - Kiểm tra tiến độ học tập của Bình
     """)
+    
+    st.sidebar.markdown("### 🤖 Tính năng thông minh")
+    st.sidebar.markdown("""
+    ✅ **Phát hiện thông tin thiếu** - AI sẽ hỏi lại
+    
+    ⚠️ **Xác nhận hành động quan trọng** - Đảm bảo an toàn
+    
+    📋 **Gợi ý proactive** - Đưa ra lời khuyên hữu ích
+    
+    📊 **Logging chi tiết** - Theo dõi từng bước xử lý
+    """)
+    
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("🎓 **ISY v2.0** - AI Tutor Assistant với trí tuệ nâng cao!")
     
     # Chat input
     if prompt := st.chat_input("Nhập lệnh của bạn tại đây... (ví dụ: Giao cho An 3 bài tập về giải hệ phương trình)"):
