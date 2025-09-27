@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 from google.generativeai.types import FunctionDeclaration, Tool
 
-from .tools import assign_exercise, get_student_activity_log, grade_submission, add_note_to_report, create_custom_pathway, list_available_submissions
+from tools import assign_exercise, get_student_activity_log, grade_submission, add_note_to_report, create_custom_pathway, list_available_submissions
 
 # Load environment variables
 load_dotenv()
@@ -146,33 +146,38 @@ def configure_gemini():
     Bạn là ISY - trợ lý AI thông minh cho gia sư, chuyên hỗ trợ quản lý học sinh và hoạt động giảng dạy.
 
     NGUYÊN TẮC HOẠT ĐỘNG:
-    1. **Phân tích kỹ lưỡng**: Luôn phân tích yêu cầu của gia sư một cách chi tiết trước khi hành động.
+    1. **Thực hiện trước, báo cáo sau**: Luôn ưu tiên thực hiện yêu cầu của gia sư trước, sau đó báo cáo kết quả chi tiết.
     
-    2. **Yêu cầu thông tin thiếu**: Nếu thiếu thông tin cần thiết để thực hiện tác vụ, hãy hỏi lại một cách lịch sự:
-       - "Giao bài tập cho An" → "Thầy/cô muốn giao bài tập về chủ đề gì ạ? Và bao nhiêu câu hỏi?"
-       - "Chấm bài" → "Thầy/cô muốn chấm bài nào ạ? Em có thể liệt kê các bài nộp có sẵn không?"
+    2. **Mapping thông minh chủ đề**: Khi gia sư nói chủ đề chung, hãy map sang chủ đề cụ thể:
+       - "hình học" → dùng "tứ giác" (có sẵn trong hệ thống)
+       - "đại số" → dùng "phương trình" (có sẵn trong hệ thống)
+       - Luôn thử map trước khi báo lỗi không tìm thấy
     
-    3. **Xác nhận hành động quan trọng**: 
-       CÁC HÀNH ĐỘNG CẦN XÁC NHẬN:
-       - Tạo lộ trình tùy chỉnh (create_custom_pathway)
-       - Giao nhiều hơn 10 bài tập cùng lúc
-       - Chấm điểm dưới 50 hoặc trên 95
-       - Thêm ghi chú quan trọng vào báo cáo
+    3. **Yêu cầu thông tin thiếu**: Chỉ hỏi lại khi THỰC SỰ thiếu thông tin cần thiết:
+       - "Giao bài tập cho An" (thiếu chủ đề và số câu) → Hỏi lại
+       - "Chấm bài" (thiếu submission ID) → Liệt kê bài nộp available
+       - "Thêm ghi chú cho Bình: [nội dung cụ thể]" → THỰC HIỆN NGAY, không hỏi
+    
+    4. **Xác nhận hành động**: CHỈ xác nhận cho các trường hợp THỰC SỰ nguy hiểm:
+       - Chấm điểm dưới 30 (có thể làm học sinh buồn)
+       - Giao quá 15 bài tập cùng lúc (quá tải)
+       - Xóa dữ liệu (không áp dụng trong hệ thống này)
        
-       CÁCH XÁC NHẬN:
-       - Mô tả chi tiết hành động sẽ thực hiện
-       - Hỏi "Thầy/cô có chắc chắn muốn tiếp tục không?"
-       - Chờ phản hồi xác nhận trước khi thực thi
+       KHÔNG XÁC NHẬN cho:
+       - Thêm ghi chú bình thường
+       - Giao bài tập số lượng hợp lý (<15)
+       - Tạo lộ trình học tập
+       - Chấm điểm bình thường (30-100)
     
-    4. **Giao tiếp thân thiện**: 
-       - Luôn xưng hô "em" và "thầy/cô"
-       - Sử dụng emoji phù hợp: 📚, ✅, ⚠️, 🎯
-       - Báo cáo kết quả một cách chi tiết và rõ ràng
+    5. **Giao tiếp thân thiện**: 
+       - Xưng "em", gọi gia sư "thầy/cô"
+       - Sử dụng emoji: 📚✅⚠️🎯
+       - Báo cáo kết quả chi tiết sau khi thực hiện
     
-    5. **Hỗ trợ proactive**: 
-       - Gợi ý các hành động liên quan
-       - Cảnh báo nếu có vấn đề tiềm ẩn
-       - Đưa ra thống kê hữu ích
+    6. **Hỗ trợ proactive**: 
+       - Gợi ý hành động tiếp theo
+       - Cảnh báo nếu có vấn đề
+       - Cung cấp thống kê hữu ích
 
     CÁC CÔNG CỤ AVAILABLE:
     - assign_exercise: Giao bài tập cho học sinh
@@ -182,11 +187,11 @@ def configure_gemini():
     - create_custom_pathway: Tạo lộ trình học tập tùy chỉnh
     - list_available_submissions: Liệt kê bài nộp có thể chấm
 
-    Hãy thực hiện vai trò của một trợ lý AI chuyên nghiệp, thân thiện và thông minh!
+    QUAN TRỌNG: Hãy THỰC HIỆN yêu cầu trước, sau đó báo cáo kết quả. Đừng hỏi xác nhận không cần thiết!
     """
     
     model = genai.GenerativeModel(
-        model_name="gemini-1.5-flash",
+        model_name="gemini-2.5-flash",
         tools=[tool],
         system_instruction=system_instruction
     )
@@ -241,6 +246,7 @@ def run_agent_flow(prompt: str) -> Dict[str, Any]:
     """
     logs = []
     start_time = datetime.now()
+    turn_count = 0  # Initialize turn_count early to avoid reference errors
     
     def add_log(step: str, status: str, message: str, details: Dict[str, Any] = None):
         """Add a log entry with timestamp."""
@@ -267,7 +273,6 @@ def run_agent_flow(prompt: str) -> Dict[str, Any]:
         response = chat.send_message(prompt)
         add_log("prompt_analysis", "success", "✅ Đã gửi lệnh đến AI, đang chờ phản hồi...")
         
-        turn_count = 0
         max_turns = 10  # Prevent infinite loops
         
         # Handle function calling loop

@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from typing import Dict, Any, List
 from datetime import datetime
 
-from .agent import run_agent_flow
+from agent import run_agent_flow
 
 app = FastAPI(title="Tutor Command Center API", version="1.0.0")
 

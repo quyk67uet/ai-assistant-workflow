@@ -48,5 +48,35 @@
     "num_questions": 5.0,
     "assigned_date": "2025-09-13T20:58:34.385799",
     "status": "assigned"
+  },
+  {
+    "id": "assignment_20250917_215746",
+    "student_id": "student_01",
+    "student_name": "An",
+    "learning_object_id": "LO-C1-07",
+    "learning_object_title": "Giải hệ phương trình bằng phương pháp thế",
+    "num_questions": 4.0,
+    "assigned_date": "2025-09-17T21:57:46.956315",
+    "status": "assigned"
+  },
+  {
+    "id": "assignment_20250927_233744",
+    "student_id": "student_01",
+    "student_name": "An",
+    "learning_object_id": "LO-C8-04",
+    "learning_object_title": "Dấu hiệu nhận biết tứ giác nội tiếp",
+    "num_questions": 3,
+    "assigned_date": "2025-09-27T23:37:44.726823",
+    "status": "assigned"
+  },
+  {
+    "id": "assignment_20250927_233932",
+    "student_id": "student_01",
+    "student_name": "An",
+    "learning_object_id": "LO-C8-04",
+    "learning_object_title": "Dấu hiệu nhận biết tứ giác nội tiếp",
+    "num_questions": 3.0,
+    "assigned_date": "2025-09-27T23:39:32.124160",
+    "status": "assigned"
   }
 ]

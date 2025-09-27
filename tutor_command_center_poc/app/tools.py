@@ -7,15 +7,22 @@ from typing import Dict, List, Any
 def _read_json(filepath: str) -> List[Dict[str, Any]]:
     """Read JSON data from file."""
     try:
-        with open(filepath, 'r', encoding='utf-8') as f:
+        # Get absolute path based on script location
+        script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        full_path = os.path.join(script_dir, filepath)
+        with open(full_path, 'r', encoding='utf-8') as f:
             return json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error reading {filepath}: {e}")
         return []
 
 
 def _write_json(filepath: str, data: List[Dict[str, Any]]) -> None:
     """Write JSON data to file."""
-    with open(filepath, 'w', encoding='utf-8') as f:
+    # Get absolute path based on script location
+    script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    full_path = os.path.join(script_dir, filepath)
+    with open(full_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 

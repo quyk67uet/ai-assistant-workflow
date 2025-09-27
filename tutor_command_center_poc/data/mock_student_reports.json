@@ -35,6 +35,12 @@
       "Hay mắc lỗi tính toán",
       "Cần cải thiện kỹ năng hình học"
     ],
-    "tutor_notes": []
+    "tutor_notes": [
+      {
+        "timestamp": "2025-09-17T22:01:58.935321",
+        "note": "Cần tăng cường luyện tập thêm về hình học",
+        "tutor": "Admin"
+      }
+    ]
   }
 ]

@@ -17,9 +17,10 @@
     "student_name": "Bình",
     "assignment_id": "assignment_20250913_204543",
     "submitted_date": "2025-09-13T21:45:00.000000",
-    "status": "submitted",
-    "score": null,
-    "feedback": null,
-    "content": "Đây là bài làm của học sinh Bình về tứ giác nội tiếp..."
+    "status": "graded",
+    "score": 92.0,
+    "feedback": "Xuất sắc! Làm rất tốt",
+    "content": "Đây là bài làm của học sinh Bình về tứ giác nội tiếp...",
+    "graded_date": "2025-09-17T22:01:04.337122"
   }
 ]

@@ -55,5 +55,24 @@
     "created_date": "2025-09-13T21:17:39.548436",
     "status": "active",
     "completion_progress": 0
+  },
+  {
+    "id": "pathway_20250917_220231",
+    "student_id": "student_01",
+    "student_name": "An",
+    "title": "Lộ trình tùy chỉnh cho An",
+    "learning_objects": [
+      {
+        "id": "LO-C1-07",
+        "title": "Giải hệ phương trình bằng phương pháp thế"
+      },
+      {
+        "id": "LO-C8-04",
+        "title": "Dấu hiệu nhận biết tứ giác nội tiếp"
+      }
+    ],
+    "created_date": "2025-09-17T22:02:31.462598",
+    "status": "active",
+    "completion_progress": 0
   }
 ]

@@ -115,5 +115,89 @@
         "Dấu hiệu nhận biết tứ giác nội tiếp"
       ]
     }
+  },
+  {
+    "timestamp": "2025-09-17T21:49:59.702145",
+    "student_id": "student_01",
+    "activity": "custom_pathway_created",
+    "details": {
+      "pathway_id": "pathway_20250917_214959",
+      "total_learning_objects": 2,
+      "learning_objects": [
+        "Giải hệ phương trình bằng phương pháp thế",
+        "Dấu hiệu nhận biết tứ giác nội tiếp"
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-09-17T21:53:41.271838",
+    "student_id": "student_02",
+    "activity": "note_added_to_report",
+    "details": {
+      "note_preview": "Cần tăng cường luyện tập thêm về hình học",
+      "total_notes": 1
+    }
+  },
+  {
+    "timestamp": "2025-09-17T21:57:46.957575",
+    "student_id": "student_01",
+    "activity": "assignment_created",
+    "details": {
+      "learning_object": "Giải hệ phương trình bằng phương pháp thế",
+      "num_questions": 4.0,
+      "assignment_id": "assignment_20250917_215746"
+    }
+  },
+  {
+    "timestamp": "2025-09-17T22:01:04.338123",
+    "student_id": "student_02",
+    "activity": "submission_graded",
+    "details": {
+      "submission_id": "sub_002",
+      "score": 92.0,
+      "feedback_preview": "Xuất sắc! Làm rất tốt"
+    }
+  },
+  {
+    "timestamp": "2025-09-17T22:01:58.936322",
+    "student_id": "student_02",
+    "activity": "note_added_to_report",
+    "details": {
+      "note_preview": "Cần tăng cường luyện tập thêm về hình học",
+      "total_notes": 1
+    }
+  },
+  {
+    "timestamp": "2025-09-17T22:02:31.486903",
+    "student_id": "student_01",
+    "activity": "custom_pathway_created",
+    "details": {
+      "pathway_id": "pathway_20250917_220231",
+      "total_learning_objects": 2,
+      "learning_objects": [
+        "Giải hệ phương trình bằng phương pháp thế",
+        "Dấu hiệu nhận biết tứ giác nội tiếp"
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-09-27T23:37:44.728823",
+    "student_id": "student_01",
+    "activity": "assignment_created",
+    "details": {
+      "learning_object": "Dấu hiệu nhận biết tứ giác nội tiếp",
+      "num_questions": 3,
+      "assignment_id": "assignment_20250927_233744"
+    }
+  },
+  {
+    "timestamp": "2025-09-27T23:39:32.127213",
+    "student_id": "student_01",
+    "activity": "assignment_created",
+    "details": {
+      "learning_object": "Dấu hiệu nhận biết tứ giác nội tiếp",
+      "num_questions": 3.0,
+      "assignment_id": "assignment_20250927_233932"
+    }
   }
 ]
